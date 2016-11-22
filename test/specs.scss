@@ -1,0 +1,7 @@
+@import "../node_modules/bootcamp/src/bootcamp";
+
+$bc-setting-return-code: true;
+
+@include runner-start;
+@import "../src/spring-rk4/_tests";
+@include runner-end;

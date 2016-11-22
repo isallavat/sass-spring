@@ -1,0 +1,19 @@
+// @typedef {Map} SpringOptions
+// @property {number} tension
+// @property {number} friction
+// @property {number} velocity
+// @property {number} tolerance
+//
+// @typedef {Map} SpringState
+// @property {number} time
+// @property {number} value
+// @property {number} velocity
+// @property {boolean} stop-spring
+//
+// @typedef {Map} State
+// @property {number} x
+// @property {number} v
+//
+// @typedef {Map} Derivative
+// @property {number} dx
+// @property {number} dv

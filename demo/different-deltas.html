@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="different-deltas.css" rel="stylesheet">
+</head>
+<body>
+	<p>
+		This shows how deltas affect animations. The total time is locked to the optimal 60fps, but you can decrease
+		the fps keyframes are generated at to try to decrease CSS bloat. Once you go below 10fps, things get weird with
+		sass math. Your sass compiler should warn you when it detects this and bails to prevent infinite loops locking
+		up your machine.
+	</p>
+	<div class="row fps">
+		<div class="demo-box a-scale-spring" tabindex="0">60fps</div>
+		<div class="demo-box b-scale-spring" tabindex="0">45fps</div>
+		<div class="demo-box c-scale-spring" tabindex="0">30fps</div>
+		<div class="demo-box d-scale-spring" tabindex="0">20fps</div>
+		<div class="demo-box e-scale-spring" tabindex="0">15fps</div>
+		<div class="demo-box f-scale-spring" tabindex="0">10fps</div>
+		<div class="demo-box g-scale-spring" tabindex="0">8fps</div>
+		<div class="demo-box h-scale-spring" tabindex="0">7fps</div>
+		<div class="demo-box i-scale-spring" tabindex="0">6fps</div>
+		<div class="demo-box j-scale-spring" tabindex="0">5fps</div>
+		<div class="demo-box l-scale-spring" tabindex="0">4fps</div>
+		<div class="demo-box m-scale-spring" tabindex="0">3fps</div>
+		<div class="demo-box n-scale-spring" tabindex="0">2fps</div>
+		<div class="demo-box o-scale-spring" tabindex="0">1fps</div>
+	</div>
+	<div class="row">
+		<div class="demo-box a-scale-spring" tabindex="0">60fps</div>
+		<div class="demo-box b-scale-spring" tabindex="0">45fps</div>
+		<div class="demo-box c-scale-spring" tabindex="0">30fps</div>
+		<div class="demo-box d-scale-spring" tabindex="0">20fps</div>
+		<div class="demo-box e-scale-spring" tabindex="0">15fps</div>
+		<div class="demo-box f-scale-spring" tabindex="0">10fps</div>
+		<div class="demo-box g-scale-spring" tabindex="0">8fps</div>
+		<div class="demo-box h-scale-spring" tabindex="0">7fps</div>
+		<div class="demo-box i-scale-spring" tabindex="0">6fps</div>
+		<div class="demo-box j-scale-spring" tabindex="0">5fps</div>
+		<div class="demo-box l-scale-spring" tabindex="0">4fps</div>
+		<div class="demo-box m-scale-spring" tabindex="0">3fps</div>
+		<div class="demo-box o-scale-spring" tabindex="0">1fps</div>
+	</div>
+</body>
+</html>

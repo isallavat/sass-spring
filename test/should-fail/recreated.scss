@@ -1,0 +1,10 @@
+@import "../../src/animation-tools";
+
+@function nullfunc($value) {
+  @return null;
+}
+
+@include create-spring(box-down, (a: test-func), spring-options(10, 10, 10));
+
+/* Fails, box-down animation already created */
+@include create-spring(box-down, (a: test-func), spring-options(20, 20, 20));

@@ -1,0 +1,86 @@
+@import "../globals";
+@import "integrator";
+
+// @param {SpringState} $state
+// @return boolean
+@function spring-rk4-finished($state) {
+  @return map-get($state, stop-spring);
+}
+
+// @param {SpringState} $state
+// @param {SpringOptions} $options
+// @param {number} $delta time delta between calls
+// @return {SpringState}
+@function spring-rk4-next($state, $options, $delta: $default-delta) {
+  @if (spring-rk4-finished($state)) {
+    @return 1;
+  }
+
+  $time: map-get($state, time) + $delta;
+
+  // Calculate previous state
+  $state-before: ( x: map-get($state, value) - 1, v: map-get($state, velocity));
+
+  // Calculate the new state
+  $state-after: spring-rk4-integrator-integrate-state($state-before, $delta, $options);
+  $value: 1 + map-get($state-after, x);
+  $final-velocity: map-get($state-after, v);
+  $net-float: map-get($state-after, x);
+  $net-1d-velocity: map-get($state-after, v);
+
+  // See if we reached the end state
+  $net-value-is-low: abs($net-float) < map-get($options, tolerance);
+  $net-velocity-is-low: abs($net-1d-velocity) < map-get($options, tolerance);
+
+  $stop-spring: $net-value-is-low and $net-velocity-is-low;
+  $velocity: $final-velocity;
+
+  @return (
+    time: $time,
+    value: $value,
+    velocity: $velocity,
+    stop-spring: $stop-spring
+  );
+}
+
+// @param {SpringOptions} $options
+// @return {SpringState}
+@function spring-rk4-initial-state($options) {
+  @return (
+    time: 0,
+    value: 0,
+    velocity: map-get($options, velocity),
+    stop-spring: false
+  );
+}
+
+// @param {number} $tension
+// @param {number} $friction
+// @param {number} $velocity
+// @param {number} $tolerance
+// @return {SpringOptions}
+@function spring-rk4-options($tension: 250, $friction: 25, $velocity: 0, $tolerance: 1 / 100) {
+  @return (
+    tension: $tension,
+    friction: $friction,
+    velocity: $velocity,
+    tolerance: $tolerance
+  );
+}
+
+@function spring-options($tension: 250, $friction: 25, $velocity: 0, $tolerance: 1 / 100) {
+  @return spring-rk4-options($tension, $friction, $velocity, $tolerance);
+}
+
+// @param {StateOptions} $options
+// @param {number} $delta
+// @return {number}
+@function spring-rk4-total-time($options, $delta: $optimal-delta) {
+  $state: spring-rk4-initial-state($options);
+
+  @while (not spring-rk4-finished($state)) {
+    $state: spring-rk4-next($state, $options, $delta);
+  }
+
+  @return map-get($state, time);
+}

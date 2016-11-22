@@ -1,0 +1,70 @@
+@import "../src/animation-tools";
+
+@function example-transform($value) {
+  @return translateY($value * 10vh);
+}
+
+@mixin generate-scale-spring($name, $delta) {
+  $spring-options: spring-options(125, 12.5, 1.25);
+  $name: "#{$name}-scale-spring";
+
+  @include create-spring($name, (
+    transform: example-transform,
+    opacity: example-opacity
+  ), $spring-options, $delta);
+
+  .#{$name} {
+    @include use-spring($name);
+  }
+}
+
+$d: 1 / 60;
+
+@include generate-scale-spring(a, 1 / 60);
+@include generate-scale-spring(b, 1 / 45);
+@include generate-scale-spring(c, 1 / 30);
+@include generate-scale-spring(d, 1 / 20);
+@include generate-scale-spring(e, 1 / 15);
+@include generate-scale-spring(f, 1 / 10);
+@include generate-scale-spring(g, 1 / 9);
+@include generate-scale-spring(h, 1 / 8);
+@include generate-scale-spring(i, 1 / 7);
+@include generate-scale-spring(j, 1 / 6);
+@include generate-scale-spring(k, 1 / 5);
+@include generate-scale-spring(l, 1 / 4);
+@include generate-scale-spring(m, 1 / 3);
+@include generate-scale-spring(n, 1 / 2);
+@include generate-scale-spring(o, 1);
+
+body {
+  font-family: sans-serif;
+  font-size: 20px;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.demo-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  text-align: center;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px;
+  background-color: #2dd7aa;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.fps .demo-box {
+  animation-timing-function: step-start;
+}

@@ -1,0 +1,55 @@
+@import "../src/animation-tools";
+
+@function example-transform($value) {
+  @return scale($value) translateY(percentage((1 - $value) / 2));
+}
+
+@function example-opacity($value) {
+  @return $value;
+}
+
+@mixin generate-scale-spring($name, $tension, $friction, $velocity) {
+  $options: spring-options($tension, $friction, $velocity);
+  $name: "#{$name}-scale-spring";
+
+  @include create-spring($name, (
+    transform: example-transform,
+    opacity: example-opacity
+  ), $options);
+
+  .#{$name} {
+    background-color: hsl(random(360), 50%, 80%);
+
+    @include use-spring($name);
+  }
+}
+
+@include generate-scale-spring('a', 100, 20, 5);
+@include generate-scale-spring('b', 200, 20, 5);
+@include generate-scale-spring('c', 300, 20, 5);
+@include generate-scale-spring('d', 400, 20, 5);
+@include generate-scale-spring('e', 200, 5, 5);
+@include generate-scale-spring('f', 200, 10, 5);
+@include generate-scale-spring('g', 200, 20, 5);
+@include generate-scale-spring('h', 200, 30, 5);
+@include generate-scale-spring('i', 200, 20, 0);
+@include generate-scale-spring('j', 200, 20, 5);
+@include generate-scale-spring('k', 200, 20, 10);
+@include generate-scale-spring('l', 200, 20, 15);
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.demo-box {
+  width: 160px;
+  height: 160px;
+  text-align: center;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 20px;
+}

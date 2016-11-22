@@ -1,0 +1,21 @@
+env:
+  - TRAVIS_NODE_VERSION=node RUBY_SASS_VERSION="~> 3.0"
+  - TRAVIS_NODE_VERSION=node RUBY_SASS_VERSION="~> 3.4"
+  - TRAVIS_NODE_VERSION=node RUBY_SASS_VERSION="~> 3.3"
+  - TRAVIS_NODE_VERSION=node RUBY_SASS_VERSION="~> 3.2"
+  - TRAVIS_NODE_VERSION=node NODE_SASS_VERSION=latest
+  - TRAVIS_NODE_VERSION=node NODE_SASS_VERSION="~3.7.0"
+  - TRAVIS_NODE_VERSION="5" NODE_SASS_VERSION="~3.6.0"
+  - TRAVIS_NODE_VERSION="5" NODE_SASS_VERSION="~3.5.0"
+  - TRAVIS_NODE_VERSION="5" NODE_SASS_VERSION="~3.4.0"
+
+before_install:
+  - travis/install.sh
+
+script:
+  - travis/test.sh
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change

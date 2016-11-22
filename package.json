@@ -1,0 +1,44 @@
+{
+  "name": "sass-spring",
+  "version": "1.0.1",
+  "description": "pure CSS spring animations",
+  "keywords": [
+    "sass",
+    "scss",
+    "css",
+    "animation",
+    "framer",
+    "spring",
+    "curve"
+  ],
+  "homepage": "https://github.com/panda-crox/sass-spring",
+  "bugs": "https://github.com/panda-crox/sass-spring/issues",
+  "author": {
+    "name": "Salavat Dautov",
+    "email": "panda.crox@gmail.com",
+    "url": "https://github.com/panda-crox"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/panda-crox/sass-spring.git"
+  },
+  "main": "src/animation-tools.scss",
+  "scripts": {
+    "test": "npm run lint && npm run test:should-fail && npm run test:bootcamp",
+    "test:should-fail": "for file in $(ls test/should-fail); do ! node-sass test/should-fail/$file; done",
+    "test:bootcamp": "node-sass test/specs.scss",
+    "lint": "node lint.js",
+    "build": "node-sass -r -o demo/ --source-map true --source-map-contents --follow --error-bell demo/",
+    "watch": "npm run build && node-sass -w -r -o demo/ --source-map true --source-map-contents --follow --error-bell demo/"
+  },
+  "devDependencies": {
+    "bootcamp": "github:apexskier/bootcamp",
+    "node-glob": "^1.2.0",
+    "node-sass": "^3.7.0",
+    "postcss": "^5.1.0",
+    "postcss-scss": "^0.1.8",
+    "stylelint": "^7.0.1",
+    "stylelint-config-standard": "^11.0.0"
+  },
+  "license": "MIT"
+}

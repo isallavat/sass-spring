@@ -1,0 +1,68 @@
+@import "../src/animation-tools";
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  overflow: hidden;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+$options: spring-options(600, 10, 10);
+
+@function move-down($value) {
+  @return translateY(percentage(($value * 2) - 1));
+}
+
+@include create-spring(box-down, (
+  transform: move-down,
+), $options);
+
+@function move-up($value) {
+  @return translateY(percentage(($value * -2) + 1));
+}
+
+@include create-spring(box-up, (
+  transform: move-up,
+), $options);
+
+.box {
+  background-color: #2dd7aa;
+  width: 130px;
+  height: 130px;
+  text-align: center;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 20px;
+  outline: none;
+
+  // stop animation at end (instead of instantly snapping back to default)
+  animation-fill-mode: forwards;
+
+  @include use-spring(box-up);
+
+  &:focus {
+    @include use-spring(box-down);
+  }
+}

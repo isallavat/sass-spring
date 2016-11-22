@@ -1,0 +1,7 @@
+@import "../../src/animation-tools";
+
+@function nullfunc($value) {
+  @return null;
+}
+
+@include create-spring(9.123, (a: test-func), spring-options(10, 10, 10));

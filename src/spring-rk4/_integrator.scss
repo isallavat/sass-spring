@@ -1,0 +1,63 @@
+// @param {SpringOptions} $options
+// @param {State} $state
+// @return {number}
+@function spring-rk4-acceleration($options, $state) {
+  @return -(map-get($options, tension) * map-get($state, x)) - (map-get($options, friction) * map-get($state, v));
+}
+
+// @param {State} $state
+// @param {number} $dt
+// @param {SpringOptions} $options
+// @return {State}
+@function spring-rk4-integrator-integrate-state($state, $dt, $options) {
+  $a: spring-rk4-integrator-evaluate-state($state, $options);
+  $b: spring-rk4-integrator-evaluate-state-with-derivative($state, $dt * 0.5, $a, $options);
+  $c: spring-rk4-integrator-evaluate-state-with-derivative($state, $dt * 0.5, $b, $options);
+  $d: spring-rk4-integrator-evaluate-state-with-derivative($state, $dt, $c, $options);
+
+  $dxdt: (1 / 6) * (map-get($a, dx) + 2 * (map-get($b, dx) + map-get($c, dx)) + map-get($d, dx));
+  $dvdt: (1 / 6) * (map-get($a, dv) + 2 * (map-get($b, dv) + map-get($c, dv)) + map-get($d, dv));
+
+  @if map-get($state, x) > 9999999999999999999999999999999999999 or map-get($state, v) > 9999999999999999999999999999999999999 {
+    @warn "integration got out of hand, try increasing your delta";
+    @return (
+      x: 0,
+      v: 0
+    );
+  }
+
+  @return (
+    x: map-get($state, x) + ($dxdt * $dt),
+    v: map-get($state, v) + ($dvdt * $dt)
+  );
+}
+
+// @private
+// @param {State} $initial-state
+// @param {SpringOptions} $options
+// @return {Derivative}
+@function spring-rk4-integrator-evaluate-state($initial-state, $options) {
+  @return (
+    dx: map-get($initial-state, v),
+    dv: spring-rk4-acceleration($options, $initial-state)
+  );
+}
+
+// @private
+// @param {State} $initial-state
+// @param {number} $dt
+// @param {Derivative} $derivative
+// @param {SpringOptions} $options
+// @return {State}
+@function spring-rk4-integrator-evaluate-state-with-derivative($initial-state, $dt, $derivative, $options) {
+  $state:
+    (
+      x: map-get($initial-state, x) + (map-get($derivative, dx) * $dt),
+      v: map-get($initial-state, v) + (map-get($derivative, dv) * $dt)
+    );
+
+  @return (
+    dx: map-get($state, v),
+    dv: spring-rk4-acceleration($options, $state)
+  );
+}

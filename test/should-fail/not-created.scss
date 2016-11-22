@@ -1,0 +1,4 @@
+@import "../../src/animation-tools";
+
+/* Fails, box-down animation not yet created */
+@include use-spring(box-down);

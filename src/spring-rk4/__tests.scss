@@ -1,0 +1,61 @@
+@import "../../node_modules/bootcamp/src/bootcamp";
+@import "functions";
+
+@mixin validate-spring-rk4-options($o) {
+  @include should(expect($o), to(have-the-exact-keys((tension, friction, velocity, tolerance))));
+  @include should(expect(map-get($o, tension)), to(have-type-of(number)));
+  @include should(expect(map-get($o, friction)), to(have-type-of(number)));
+  @include should(expect(map-get($o, velocity)), to(have-type-of(number)));
+  @include should(expect(map-get($o, tolerance)), to(have-type-of(number)));
+}
+
+@mixin validate-spring-rk4-state($s) {
+  @include should(expect($s), to(have-the-exact-keys((time, value, velocity, stop-spring))));
+  @include should(expect(map-get($s, time)), to(have-type-of(number)));
+  @include should(expect(map-get($s, value)), to(have-type-of(number)));
+  @include should(expect(map-get($s, velocity)), to(have-type-of(number)));
+  @include should(expect(map-get($s, stop-spring)), to(have-type-of(bool)));
+}
+
+@include describe("Spring rk4") {
+  @include it("should generate steps of an animation") {
+    $options: spring-rk4-options();
+    $state: spring-rk4-initial-state($options);
+
+    @include validate-spring-rk4-state($state);
+    @include validate-spring-rk4-options($options);
+    @include should(expect(map-get($state, stop-spring)), to(be(false)));
+    @include should(expect(spring-rk4-total-time($options)), to(be-greater-than(0)));
+
+    $counter: 0;
+
+    @while (not spring-rk4-finished($state)) {
+      $state: spring-rk4-next($state, $options);
+      $counter: $counter + 1;
+
+      @include validate-spring-rk4-state($state);
+    }
+
+    @include should(expect($counter), to(be-greater-than(1)));
+    @include should(expect(map-get($state, time)), to(be(spring-rk4-total-time($options))));
+    @include should(expect(map-get($state, value)), to(be-close-to(1, 3)));
+    @include should(expect(map-get($state, velocity)), to(be-close-to(0, 1)));
+    @include should(expect(map-get($state, stop-spring)), to(be(true)));
+  }
+
+  @include it("should bail early if a high delta causes overflow") {
+    // Produces a warning
+    $options: spring-rk4-options();
+    $state: spring-rk4-initial-state($options);
+
+    @while (not spring-rk4-finished($state)) {
+      $state: spring-rk4-next($state, $options, 1);
+    }
+
+    $this: unique-id();
+    $called: $this;
+
+    // failure would result in a infinite loop
+    @include should(expect($this), to(be($called)));
+  }
+}
